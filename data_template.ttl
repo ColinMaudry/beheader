@@ -1,0 +1,7 @@
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix : <http://colin.maudry.com/ontologies/dgfr#> .
+@prefix schema: <http://schema.org/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix phdd: <http://rdf-vocabulary.ddialliance.org/phdd#> .
+
+
