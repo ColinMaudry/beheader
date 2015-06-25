@@ -14,7 +14,7 @@ Sample Turtle:
 @prefix dcat: <http://www.w3.org/ns/dcat#> .
 
 <https://www.data.maudry.com/fr/resources/ff91442b-4916-4567-ab87-e5a6fe6254b6>
-        dgfr:responseStatusCode "HTTP/1.1 200 OK" ;
+        :responseStatusCode "HTTP/1.1 200 OK" ;
         dcat:byteSize 29 ;
         dcat:mediaType "text/html" .
 ```
