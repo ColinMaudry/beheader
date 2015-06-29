@@ -49,10 +49,17 @@ do
 ((number++))
 echo " "
 echo "$number) $url"
-
 #Get headers using URL to check the HTTP response code (200, 404, 500, etc.) and content type
 #-skL = silent, ignore SSL certif, follow redirects
-curl -X HEAD -skL -m 1 ${url/&/\\&} -D temp/http_headers
+
+#Inspire URLs take there time to respond...
+if [[ $url == *"inspire.sgmap"*  ]] ; then
+timeout=4
+else
+timeout=1
+fi
+
+curl -X HEAD -skL -m $timeout "$url" -D temp/http_headers
 
 #All upper case, remove final carriage return
 http_response_code=`grep "HTTP/" temp/http_headers | tail -n 1 |tr [a-z] [A-Z] |tr -d '\r'`
