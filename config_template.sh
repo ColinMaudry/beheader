@@ -1,7 +1,5 @@
 #!/bin/bash
 
-
-
 #Configuration
 ENDPOINT_URL="http://www.data.maudry.com:3030"
 ENDPOINT_READ_URL=$ENDPOINT_URL"/datagouvfr/query"
@@ -16,10 +14,9 @@ ROWNUM_PROP=":numberOfRows"
 CONTENT_TYPE_PROP="dcat:mediaType"
 CONTENT_LENGTH_PROP="dcat:byteSize"
 
-UPLOAD_GRAPH="urn:csv:data"
+#If you get many errors upon data upload to triple store  (encoding, malformed Turtle), set this to "true". It will make an upload every 5 distribution. Slower, but less data loss.
+SMALL_BATCHES="false"
 
-PARSE_CSV="true"
-NUM_SAMPLE_VALUES=3
 
 
 

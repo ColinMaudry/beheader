@@ -89,22 +89,27 @@ fi
 echo "<$csv> $CONTENT_TYPE_PROP \"$content_type\" ." >> temp/data.ttl
 
 fi #check if available
-
-if [[ `echo ${number: -1}` -eq 0 ]] || [[ `echo ${number: -1}` -eq 5 ]] ; then
-echo "Uploading batch $(($number - 4))-$number..."
-if [[ -s temp/csvdata.ttl ]] ; then
-curl -s -X POST $full_endpoint_url\?graph=urn%3Acsv%3Adata --data-binary @"temp/csvdata.ttl" -H "Content-type: text/turtle"
-#Remove the first lines with prefixes
-tail -n +6 temp/csvdata.ttl >> temp/all_csvdata.ttl
-cp -f data_template.ttl temp/csvdata.ttl
-fi #Does temp/csvdata.ttl exist?
-
-curl -s -X POST $full_endpoint_url\?graph=urn%3Afiles%3Adata --data-binary @"temp/data.ttl" -H "Content-type: text/turtle"
-tail -n +6 temp/data.ttl >> temp/all_data.ttl
-cp -f data_template.ttl temp/data.ttl
-fi #Is $number a multiple of 5?
+if [[ $SMALL_BATCHES == "true" ]] ; then
+	if [[ `echo ${number: -1}` -eq 0 ]] || [[ `echo ${number: -1}` -eq 5 ]] ; then
+	echo "Uploading batch $(($number - 4))-$number..."
+	#iconv -c ignores encoding errors
+	iconv -c -f US-ASCII -t UTF-8 temp/data.ttl > temp/data_utf8.ttl
+	mv -f temp/data_utf8.ttl temp/data.ttl
+	curl -s -X POST $full_endpoint_url\?graph=urn%3Afiles%3Adata --data-binary @"temp/data.ttl" -H "Content-type: text/turtle"
+	tail -n +6 temp/data.ttl >> temp/all_data.ttl
+	cp -f data_template.ttl temp/data.ttl
+	fi #Is $number a multiple of 5?
+fi
 
 done < temp/list.csv #loop on CSV list entries
+
+if [[ $SMALL_BATCHES != "true" ]] ; then 
+        echo "Uploading all data in a single shot..."
+        #iconv -c ignores encoding errors
+        iconv -c -f US-ASCII -t UTF-8 temp/data.ttl > temp/data_utf8.ttl
+        mv -f temp/data_utf8.ttl temp/data.ttl
+        curl -s -X POST $full_endpoint_url\?graph=urn%3Afiles%3Adata --data-binary @"temp/data.ttl" -H "Content-type: text/turtle"
+fi
 
 date=`date`
 echo "Finished at: $date"

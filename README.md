@@ -1,4 +1,4 @@
-# beheader
+# beheader 0.9.1
 Scripts to analyze data files and get information about them:
 
 * size
@@ -23,13 +23,18 @@ Sample Turtle:
 
 This bash script is designed to work on Unix systems.
 
-You need the following utilities
+You need the following utilities installed
 
 * curl
+* iconv
 
 It's preconfigured to upload to http://www.data.maudry.com, but you need the credentials to write there. So to upload somewhere else you need to modify the target URL in beheader.sh, and provide your own credential as $1 and $2.
 
-### v0.9
+#### 0.9.1
+
+* `iconv` -c Serializes the resulting TTL files to UTF-8 to remove encoding errors (loss of data :( )
+
+### 0.9
 
 * Lists all dcat:Distribution referenced on data.gouv.fr, by ascending creation date
 * For each file:
