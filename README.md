@@ -30,9 +30,12 @@ You need the following utilities installed
 
 It's preconfigured to upload to http://www.data.maudry.com, but you need the credentials to write there. So to upload somewhere else you need to modify the target URL in beheader.sh, and provide your own credential as $1 and $2.
 
-#### 0.9.1
+### 0.10
 
 * `iconv` -c Serializes the resulting TTL files to UTF-8 to remove encoding errors (loss of data :( )
+* & signs in URLs are better supported
+* Inspire URL have a more flexible timeout...
+
 
 ### 0.9
 
