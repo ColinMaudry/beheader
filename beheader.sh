@@ -19,8 +19,10 @@ else
 full_endpoint_url=$ENDPOINT_WRITE_URL
 fi #check whether credentials are provided
 
+if [[ $SMALL_BATCHES == "true" ]] ; then
 echo "Clearing target graphs..."
-curl -s -X DELETE $full_endpoint_url\?graph=urn%3Afiles%3Adata
+curl -s -X DELETE $full_endpoint_url --data-urlencode "graph=$TARGET_GRAPH"
+fi
 
 date=`date`
 echo "Started at: $date"
@@ -47,22 +49,15 @@ do
 echo " "
 echo "$number) $url"
 #Get headers using URL to check the HTTP response code (200, 404, 500, etc.) and content type
-#-skL = silent, ignore SSL certif, follow redirects
-
-#Inspire URLs take their time to respond...
-if [[ $url == *"inspire.sgmap"*  ]] ; then
-timeout=4
-else
-timeout=1
-fi
-
-curl -X HEAD -skL -m $timeout "$url" -D temp/http_headers
+#-skIL = silent, ignore SSL certif, only print headers, follow redirects
+#...and I print the result in a file
+curl -skIL -X HEAD "$url" 2>&1 | less > temp/http_headers
 
 #All upper case, remove final carriage return
 http_response_code=`grep "HTTP/" temp/http_headers | tail -n 1 |tr [a-z] [A-Z] |tr -d '\r'`
 echo " " >> temp/data.ttl
 echo "#File: $url" >> temp/data.ttl
-response_triple="<$uri>  $HTTP_RESPONSE_PROP  \"$http_response_code\" ."
+response_triple="<$uri> $HTTP_RESPONSE_PROP \"$http_response_code\" ."
 echo "Response code: 		$http_response_code"
 echo $response_triple >> temp/data.ttl
 
@@ -112,7 +107,7 @@ if [[ $SMALL_BATCHES != "true" ]] ; then
         #iconv -c ignores encoding errors
         iconv -c -f US-ASCII -t UTF-8 temp/data.ttl > temp/data_utf8.ttl
         mv -f temp/data_utf8.ttl temp/data.ttl
-        curl -s -X POST $full_endpoint_url\?graph=urn%3Afiles%3Adata --data-binary @"temp/data.ttl" -H "Content-type: text/turtle"
+        curl -s -X PUT "$full_endpoint_url?graph=$TARGET_GRAPH" --data-binary @"temp/data.ttl" -H "Content-type: text/turtle"
 fi
 
 date=`date`
