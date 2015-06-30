@@ -2,14 +2,12 @@ PREFIX dgfr: <http://colin.maudry.com/ontologies/dgfr#>
 PREFIX dcat: <http://www.w3.org/ns/dcat#>
 PREFIX dcterms: <http://purl.org/dc/terms/>
 
-SELECT ?csv ?url ?issued
+SELECT ?uri ?url ?issued
 WHERE {
   graph ?graph {
-    ?csv a dcat:Distribution ;
+    ?uri a dcat:Distribution ;
       dcat:downloadUrl ?url ;
       dcterms:issued ?issued .
   }
 }
 ORDER BY DESC (?issued)
-limit 20
-
