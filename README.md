@@ -1,4 +1,4 @@
-# beheader 0.9.1
+# beheader 0.10
 Scripts to analyze data files and get information about them:
 
 * size
