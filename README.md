@@ -34,8 +34,8 @@ It's preconfigured to upload to http://www.data.maudry.com, but you need the cre
 
 * `iconv` -c Serializes the resulting TTL files to UTF-8 to remove encoding errors (loss of data :( )
 * & signs in URLs are better supported
+* Either upload data by small batches of 5 distributions, or a single shot at the end
 * Inspire URL have a more flexible timeout...
-
 
 ### 0.9
 
