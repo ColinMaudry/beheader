@@ -4,6 +4,8 @@
 ENDPOINT_URL="http://www.data.maudry.com:3030"
 ENDPOINT_READ_URL=$ENDPOINT_URL"/datagouvfr/query"
 ENDPOINT_WRITE_URL=$ENDPOINT_URL"/datagouvfr/data"
+TARGET_GRAPH="urn%3Afiles%3Adata" #must be URL encoded, for instance at http://meyerweb.com/eric/tools/dencoder/
+
 USER_NAME=
 USER_PASSWORD=
 
