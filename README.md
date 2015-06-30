@@ -1,13 +1,16 @@
-# beheader 0.10
-Scripts to analyze data files and get information about them:
+# beheader 0.10.1
+
+Script that retrieves a list of [dcat:Distribution](http://www.w3.org/TR/vocab-dcat/#Class:_Distribution) (file metadata) from a SPARQL endpoint and uses their URL to retrieve some information:
 
 * size
 * media type
 * availability
 
+The information is stored as RDF and uploaded to the same triple store as for the DCAT metadata, but in a different graph.
+
 It's called the beheader because the data admins get beheaded when the script reports the number of unavailable files (errors 404, 500)
 
-Sample Turtle:
+Sample Turtle RDF output:
 
 ```turtle
 @prefix : <http://colin.maudry.com/ontologies/dgfr#>.
@@ -29,6 +32,11 @@ You need the following utilities installed
 * iconv
 
 It's preconfigured to upload to http://www.data.maudry.com, but you need the credentials to write there. So to upload somewhere else you need to modify the target URL in beheader.sh, and provide your own credential as $1 and $2.
+
+#### 0.10.1
+
+* Improved cURL command for faster and more robust retrieval of HTTP headers (removed Inspire URL hack)
+* Possibility to specify the name of the target graph
 
 ### 0.10
 
