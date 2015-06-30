@@ -9,9 +9,7 @@ rm -rf temp
 #Create temp dir
 mkdir temp
 cp data_template.ttl temp/all_data.ttl
-cp data_template.ttl temp/all_csvdata.ttl
 cp data_template.ttl temp/data.ttl
-cp data_template.ttl temp/csvdata.ttl
 
 if [[ "$USER_NAME" != "" ]]
 then
@@ -29,14 +27,14 @@ fi
 date=`date`
 echo "Started at: $date"
 
-#The list of CSVs, sorted per dcterms created
+#The list of files, sorted per dcterms created
 echo "Getting list of files..."
 curl -s $ENDPOINT_READ_URL -H "Accept: text/csv"  --data-urlencode query@sparql/list.rq --output temp/list.csv
 
 sed -i '1d' temp/list.csv
 
 if [[ -n $1 ]] ; then
-echo "urn:test:csv,$1,somedate" > temp/list.csv
+echo "urn:test:file,$1,somedate" > temp/list.csv
 fi
 filenum=`csvtool height temp/list.csv`
 echo "$filenum files to process"
@@ -45,7 +43,7 @@ number=0
 while read -r line
 do
 	IFS=","
-        read -r csv url issued  <<< "$line"
+        read -r uri url issued  <<< "$line"
 
 ((number++))
 echo " "
@@ -59,7 +57,7 @@ curl -skIL -X HEAD "$url" 2>&1 | less > temp/http_headers
 http_response_code=`grep "HTTP/" temp/http_headers | tail -n 1 |tr [a-z] [A-Z] |tr -d '\r'`
 echo " " >> temp/data.ttl
 echo "#File: $url" >> temp/data.ttl
-response_triple="<$csv>  $HTTP_RESPONSE_PROP  \"$http_response_code\" ."
+response_triple="<$uri> $HTTP_RESPONSE_PROP \"$http_response_code\" ."
 echo "Response code: 		$http_response_code"
 echo $response_triple >> temp/data.ttl
 
@@ -85,9 +83,9 @@ echo "Size: $content_length"
 
 echo "Content type: 		$content_type"
 if [[ $content_length -gt 1 ]] ; then
-echo "<$csv> $CONTENT_LENGTH_PROP $content_length ." >> temp/data.ttl
+echo "<$uri> $CONTENT_LENGTH_PROP $content_length ." >> temp/data.ttl
 fi
-echo "<$csv> $CONTENT_TYPE_PROP \"$content_type\" ." >> temp/data.ttl
+echo "<$uri> $CONTENT_TYPE_PROP \"$content_type\" ." >> temp/data.ttl
 
 fi #check if available
 if [[ $SMALL_BATCHES == "true" ]] ; then
