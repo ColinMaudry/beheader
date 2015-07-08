@@ -9,12 +9,12 @@ TARGET_GRAPH="urn%3Afiles%3Adata" #must be URL encoded, for instance at http://m
 USER_NAME=
 USER_PASSWORD=
 
-
 HTTP_RESPONSE_PROP=":responseStatusCode"
 COLNUM_PROP=":numberOfColumns"
 ROWNUM_PROP=":numberOfRows"
 CONTENT_TYPE_PROP="dcat:mediaType"
 CONTENT_LENGTH_PROP="dcat:byteSize"
+AVAILABILITY_PROP=":available"
 
 #If you get many errors upon data upload to triple store  (encoding, malformed Turtle), set this to "true". It will make an upload every 5 distribution. Slower, but less data loss.
 SMALL_BATCHES="false"
