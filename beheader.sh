@@ -46,15 +46,17 @@ do
         read -r uri url issued  <<< "$line"
 
 ((number++))
+
 echo " "
 echo "$number) $url"
 #Get headers using URL to check the HTTP response code (200, 404, 500, etc.) and content type
 #-skIL = silent, ignore SSL certif, only print headers, follow redirects
 #...and I print the result in a file
-curl -skIL -X HEAD "$url" 2>&1 | less > temp/http_headers
+curl -skIL -X GET "$url" 2>&1 | less > temp/http_headers
 
 #All upper case, remove final carriage return
 http_response_code=`grep "HTTP/" temp/http_headers | tail -n 1 |tr [a-z] [A-Z] |tr -d '\r'`
+
 echo " " >> temp/data.ttl
 echo "#File: $url" >> temp/data.ttl
 response_triple="<$uri> $HTTP_RESPONSE_PROP \"$http_response_code\" ."
@@ -63,6 +65,8 @@ echo $response_triple >> temp/data.ttl
 
 if [[ $http_response_code ==  *"200"* ]]
 then
+
+echo "<$uri> $AVAILABILITY_PROP true ." >> temp/data.ttl
 
 #Fetch Content-Type returned by the server
 full_content_type=`grep "Content-Type: " temp/http_headers | tail -n 1 |tr -d "\r" `
@@ -79,7 +83,7 @@ fi
 #Fetch Content-Length
 full_content_length=`grep "Content-Length: " temp/http_headers | tail -n 1 |tr -d "\r" `
 content_length=`echo "${full_content_length:16}"|tr -d '\r'`
-echo "Size: $content_length"
+echo "Content size: 		$content_length"
 
 echo "Content type: 		$content_type"
 if [[ $content_length -gt 1 ]] ; then
@@ -87,7 +91,11 @@ echo "<$uri> $CONTENT_LENGTH_PROP $content_length ." >> temp/data.ttl
 fi
 echo "<$uri> $CONTENT_TYPE_PROP \"$content_type\" ." >> temp/data.ttl
 
+else #resource is not available
+echo "<$uri> $AVAILABILITY_PROP false ." >> temp/data.ttl
+
 fi #check if available
+
 if [[ $SMALL_BATCHES == "true" ]] ; then
 	if [[ `echo ${number: -1}` -eq 0 ]] || [[ `echo ${number: -1}` -eq 5 ]] ; then
 	echo "Uploading batch $(($number - 4))-$number..."
