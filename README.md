@@ -1,4 +1,4 @@
-# beheader 0.10.1
+# beheader 0.11.0
 
 Script that retrieves a list of [dcat:Distribution](http://www.w3.org/TR/vocab-dcat/#Class:_Distribution) (file metadata) from a SPARQL endpoint and uses their URL to retrieve some information:
 
@@ -18,6 +18,7 @@ Sample Turtle RDF output:
 
 <https://www.data.maudry.com/fr/resources/ff91442b-4916-4567-ab87-e5a6fe6254b6>
         :responseStatusCode "HTTP/1.1 200 OK" ;
+				dgfr:available true ;
         dcat:byteSize 29 ;
         dcat:mediaType "text/html" .
 ```
@@ -31,7 +32,18 @@ You need the following utilities installed
 * curl
 * iconv
 
-It's preconfigured to upload to http://www.data.maudry.com, but you need the credentials to write there. So to upload somewhere else you need to modify the target URL in beheader.sh, and provide your own credential as $1 and $2.
+## Configuration
+
+1. Make a copy of `config_template.sh`
+2. Rename it `config.sh`
+3. Configure as you please
+
+It's preconfigured to upload to http://www.data.maudry.com, but you need the credentials to write there. So to upload somewhere else you need to modify `ENDOINT_URL` to match the base URL of your RDF repository.
+
+### 0.11.0
+
+* Switched to `curl -X GET -I` since it doesn't download the file and has better support from servers
+* Added inference of availability. If status is not `200 OK` then `dgfr:available false`
 
 #### 0.10.1
 
