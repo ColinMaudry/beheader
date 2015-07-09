@@ -52,12 +52,19 @@ echo "$number) $url"
 #Get headers using URL to check the HTTP response code (200, 404, 500, etc.) and content type
 #-skIL = silent, ignore SSL certif, only print headers, follow redirects
 #...and I print the result in a file
-curl -skIL -X GET -m $TIMEOUT "$url" 2>&1 | less > temp/http_headers
+curl -skIL -X HEAD -m $TIMEOUT "$url" 2>&1 | less > temp/http_headers
 
 if  [[ -s temp/http_headers  ]] ; then
 
 #All upper case, remove final carriage return
 http_response_code=`grep "HTTP/" temp/http_headers | tail -n 1 |tr [a-z] [A-Z] |tr -d '\r'`
+
+if [[ $http_response_code == *"400"* ]] || [[  $http_response_code == *"405"*  ]] ; then #if HEAD isn't supported
+echo "...fall back to GET!"
+curl -skIL -X GET -m $TIMEOUT "$url" 2>&1 | less > temp/http_headers
+http_response_code=`grep "HTTP/" temp/http_headers | tail -n 1 |tr [a-z] [A-Z] |tr -d '\r'`
+fi
+
 
 echo " " >> temp/data.ttl
 echo "# $number" >> temp/data.ttl
