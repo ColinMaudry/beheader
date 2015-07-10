@@ -38,7 +38,7 @@ You need the following utilities installed
 2. Rename it `config.sh`
 3. Configure as you please
 
-It's preconfigured to upload to http://www.data.maudry.com, but you need the credentials to write there. So to upload somewhere else you need to modify `ENDOINT_URL` to match the base URL of your RDF repository.
+It's preconfigured to upload to http://www.data.maudry.com, but you need the credentials to write there. So to upload somewhere else you need to modify `ENDPOINT_URL` to match the base URL of your RDF repository.
 
 ### 0.12.0
 
