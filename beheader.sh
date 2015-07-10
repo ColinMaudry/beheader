@@ -52,19 +52,26 @@ echo "$number) $url"
 #Get headers using URL to check the HTTP response code (200, 404, 500, etc.) and content type
 #-skIL = silent, ignore SSL certif, only print headers, follow redirects
 #...and I print the result in a file
-curl -skIL -X GET "$url" 2>&1 | less > temp/http_headers
+curl -skIL -X HEAD -m $TIMEOUT "$url" 2>&1 | less > temp/http_headers
+
+if  [[ -s temp/http_headers  ]] ; then
 
 #All upper case, remove final carriage return
 http_response_code=`grep "HTTP/" temp/http_headers | tail -n 1 |tr [a-z] [A-Z] |tr -d '\r'`
 
+if [[ $http_response_code =~ 40[0,5] ]] ; then #if HEAD isn't supported (400 or 405)
+echo "...fall back to GET!"
+curl -skIL -X GET -m $TIMEOUT "$url" 2>&1 | less > temp/http_headers
+http_response_code=`grep "HTTP/" temp/http_headers | tail -n 1 |tr [a-z] [A-Z] |tr -d '\r'`
+fi
+
 echo " " >> temp/data.ttl
-echo "#File: $url" >> temp/data.ttl
+echo "# $number" >> temp/data.ttl
 response_triple="<$uri> $HTTP_RESPONSE_PROP \"$http_response_code\" ."
 echo "Response code: 		$http_response_code"
 echo $response_triple >> temp/data.ttl
 
-if [[ $http_response_code ==  *"200"* ]]
-then
+if [[ $http_response_code =~ [2,3][0-9][0-9] ]] ; then #2xx and 3xx HTTP response codes are considered OK
 
 echo "<$uri> $AVAILABILITY_PROP true ." >> temp/data.ttl
 
@@ -95,6 +102,14 @@ else #resource is not available
 echo "<$uri> $AVAILABILITY_PROP false ." >> temp/data.ttl
 
 fi #check if available
+
+else #The server timed out
+http_response_code="Timed out after $TIMEOUT seconds"
+echo "<$uri> $AVAILABILITY_PROP false ;" >> temp/data.ttl
+echo "$HTTP_RESPONSE_PROP \"$http_response_code\" ." >> temp/data.ttl
+echo "Response code:            $http_response_code"
+
+fi #check if timed out
 
 if [[ $SMALL_BATCHES == "true" ]] ; then
 	if [[ `echo ${number: -1}` -eq 0 ]] || [[ `echo ${number: -1}` -eq 5 ]] ; then

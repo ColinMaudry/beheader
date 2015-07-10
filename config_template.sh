@@ -19,6 +19,8 @@ AVAILABILITY_PROP=":available"
 #If you get many errors upon data upload to triple store  (encoding, malformed Turtle), set this to "true". It will make an upload every 5 distribution. Slower, but less data loss.
 SMALL_BATCHES="false"
 
+#Time allowed (in seconds) to check a distribution. If the server didn't respond in time, the distrib is considered unavailable
+TIMEOUT=20
 
 
 

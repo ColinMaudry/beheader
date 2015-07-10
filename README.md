@@ -1,4 +1,4 @@
-# beheader 0.11.0
+# beheader 0.12.0
 
 Script that retrieves a list of [dcat:Distribution](http://www.w3.org/TR/vocab-dcat/#Class:_Distribution) (file metadata) from a SPARQL endpoint and uses their URL to retrieve some information:
 
@@ -17,10 +17,10 @@ Sample Turtle RDF output:
 @prefix dcat: <http://www.w3.org/ns/dcat#> .
 
 <https://www.data.maudry.com/fr/resources/ff91442b-4916-4567-ab87-e5a6fe6254b6>
-        :responseStatusCode "HTTP/1.1 200 OK" ;
-				dgfr:available true ;
-        dcat:byteSize 29 ;
-        dcat:mediaType "text/html" .
+	:responseStatusCode "HTTP/1.1 200 OK" ;
+	dgfr:available true ;
+	dcat:byteSize 29 ;
+	dcat:mediaType "text/html" .
 ```
 
 ## Requirements
@@ -39,6 +39,12 @@ You need the following utilities installed
 3. Configure as you please
 
 It's preconfigured to upload to http://www.data.maudry.com, but you need the credentials to write there. So to upload somewhere else you need to modify `ENDOINT_URL` to match the base URL of your RDF repository.
+
+### 0.12.0
+
+* 2xx and 3xx codes assume the file is available
+* Switched back to HEAD to enable certain servers to have adequate response. If unsupported, automatic switch to GET
+* Configurable timeout (waiting time after which you consider the resource is not available)
 
 ### 0.11.0
 
