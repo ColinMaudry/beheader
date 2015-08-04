@@ -70,7 +70,8 @@ echo "...fall back to GET!"
 datetime=`date +%FT%H-%M-%S%z`
 curl -skIL -X GET -w @"curl-format" -m $TIMEOUT "$url" 2>&1 | less > temp/http_headers
 http_response_code=`grep "HTTP/" temp/http_headers | tail -n 1 |tr [a-z] [A-Z] |tr -d '\r'`
-http_response_time=`cut -d " " -f 2  <<< grep "Total-time" temp/http_headers | tr -d '\r'`
+full_http_response_time=`grep "Total-time" temp/http_headers | tr -d '\r' | sed s/,/./g`
+http_response_time=`cut -d " " -f 2  <<< "$full_http_response_time"`
 fi
 
 echo " " >> $datafile
