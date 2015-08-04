@@ -1,14 +1,17 @@
 # beheader 0.13.0
 
-Script that retrieves a list of [dcat:Distribution](http://www.w3.org/TR/vocab-dcat/#Class:_Distribution) (file metadata) from a SPARQL endpoint and uses their URL to retrieve some information:
+[DCAT](http://www.w3.org/TR/vocab-dcat) is a vocabulary used to describe published data. It's consequently metadata for this published data. A typical way to manage this DCAT metadata is as [RDF](https://en.wikipedia.org/wiki/Resource_Description_Framework), in a triple store, and to expose this data via a SPARQL endpoint to query it.
+
+Beheader is a script that retrieves all [dcat:Distribution](http://www.w3.org/TR/vocab-dcat/#Class:_Distribution) (file metadata) from a SPARQL endpoint and uses the file URL (`dcat:downloadUrl`) to retrieve some information about it:
 
 * size
 * media type
 * availability
+* server response time in seconds
 
-The information is stored as RDF and uploaded to the same triple store as for the DCAT metadata, but in a different graph.
+The information is stored as RDF and uploaded to the same triple store as for the DCAT metadata, but in a different graph. The result of this script is enriched metadata about the published files.
 
-It's called the beheader because the data admins get beheaded when the script reports the number of unavailable files (errors 404, 500)
+It's called the beheader because the data admins get beheaded when the script reports the number of unavailable files (errors 404, 500).
 
 Sample Turtle RDF output:
 
@@ -47,6 +50,28 @@ You need the following utilities installed
 3. Configure as you please
 
 It's preconfigured to upload to http://www.data.maudry.com, but you need the credentials to write there. So to upload somewhere else you need to modify `ENDPOINT_URL` to match the base URL of your RDF repository.
+
+Tell me if you struggle with the configuration.
+
+## Run
+
+In your terminal, run:
+
+```bash
+./beheader.sh
+```
+
+If you get an error, you may need to make the file executable first, this way:
+
+```
+chmod +x beheader.sh
+```
+
+In order to save the logs, you can run instead:
+
+```bash
+./beheader.sh > beheader.log &
+```
 
 ### 0.13.0
 
