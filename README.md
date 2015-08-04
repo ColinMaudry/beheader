@@ -29,7 +29,6 @@ OUND" ;
 :responseTime 0.282 ;
 :availabilityCheckedOn "2015-08-04T18-32-39+0200"^^xs:dateTime .
 <https://www.data.maudry.com/fr/resources/164932c5-19ec-444b-9695-5e914a4dce22> :available false .
-67-ab87-e5a6fe6254b6>
 ```
 
 ## Requirements
