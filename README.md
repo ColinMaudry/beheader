@@ -20,15 +20,14 @@ Sample Turtle RDF output:
 @prefix dcat: <http://www.w3.org/ns/dcat#> .
 @prefix xs: <http://www.w3.org/2001/XMLSchema#> .
 
-<https://www.data.maudry.com/fr/resources/ff91442b-4916-45<https://www.data.maudry.com/fr/resources/a6eda5aa-2741-4cfd-a2b3-e8ae6277937b> :responseStatusCode "HTTP/1.1 200 OK" ;
+<https://www.data.maudry.com/fr/resources/a6eda5aa-2741-4cfd-a2b3-e8ae6277937b> :responseStatusCode "HTTP/1.1 200 OK" ;
 :responseTime 0.227 ;
 :availabilityCheckedOn "2015-08-04T18-32-38+0200"^^xs:dateTime .
 <https://www.data.maudry.com/fr/resources/a6eda5aa-2741-4cfd-a2b3-e8ae6277937b> :available true .
 <https://www.data.maudry.com/fr/resources/a6eda5aa-2741-4cfd-a2b3-e8ae6277937b> dcat:byteSize 29 .
 <https://www.data.maudry.com/fr/resources/a6eda5aa-2741-4cfd-a2b3-e8ae6277937b> dcat:mediaType "text/html" .
  
-<https://www.data.maudry.com/fr/resources/164932c5-19ec-444b-9695-5e914a4dce22> :responseStatusCode "HTTP/1.1 404 NOT F
-OUND" ;
+<https://www.data.maudry.com/fr/resources/164932c5-19ec-444b-9695-5e914a4dce22> :responseStatusCode "HTTP/1.1 404 NOT FOUND" ;
 :responseTime 0.282 ;
 :availabilityCheckedOn "2015-08-04T18-32-39+0200"^^xs:dateTime .
 <https://www.data.maudry.com/fr/resources/164932c5-19ec-444b-9695-5e914a4dce22> :available false .
