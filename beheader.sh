@@ -57,27 +57,28 @@ echo "$number) $url"
 #-skIL = silent, ignore SSL certif, only print headers, follow redirects
 #...and I print the result in a file
 datetime=`date +%FT%H-%M-%S%z`
-curl -skIL -X HEAD -m $TIMEOUT "$url" 2>&1 | less > temp/http_headers
+curl -skIL -X HEAD -w @"curl-format" -m $TIMEOUT "$url" 2>&1 | less > temp/http_headers
 
 if  [[ -s temp/http_headers  ]] ; then
 
 #All upper case, remove final carriage return
 http_response_code=`grep "HTTP/" temp/http_headers | tail -n 1 |tr [a-z] [A-Z] |tr -d '\r'`
-
+full_http_response_time=`grep "Total-time" temp/http_headers | tr -d '\r' | sed s/,/./g`
+http_response_time=`cut -d " " -f 2  <<< "$full_http_response_time"`
 if [[ $http_response_code =~ 40[0,5] ]] ; then #if HEAD isn't supported (400 or 405)
 echo "...fall back to GET!"
 datetime=`date +%FT%H-%M-%S%z`
-curl -skIL -X GET -m $TIMEOUT "$url" 2>&1 | less > temp/http_headers
+curl -skIL -X GET -w @"curl-format" -m $TIMEOUT "$url" 2>&1 | less > temp/http_headers
 http_response_code=`grep "HTTP/" temp/http_headers | tail -n 1 |tr [a-z] [A-Z] |tr -d '\r'`
+http_response_time=`cut -d " " -f 2  <<< grep "Total-time" temp/http_headers | tr -d '\r'`
 fi
 
 echo " " >> $datafile
 echo "# $number" >> $datafile
-response_triple="<$uri> $HTTP_RESPONSE_PROP \"$http_response_code\" ;"
-datetime_triple="$DATETIMECHECKED_PROP \"$datetime\"^^xs:dateTime ."
+echo "<$uri> $HTTP_RESPONSE_PROP \"$http_response_code\" ;" >> $datafile
+echo "$HTTP_RESPONSE_TIME_PROP $http_response_time ;" >> $datafile
+echo "$DATETIMECHECKED_PROP \"$datetime\"^^xs:dateTime ." >> $datafile
 echo "Response code: 		$http_response_code"
-echo $response_triple >> $datafile
-echo $datetime_triple >> $datafile
 
 if [[ $http_response_code =~ [2,3][0-9][0-9] ]] ; then #2xx and 3xx HTTP response codes are considered OK
 
