@@ -15,6 +15,7 @@ ROWNUM_PROP=":numberOfRows"
 CONTENT_TYPE_PROP="dcat:mediaType"
 CONTENT_LENGTH_PROP="dcat:byteSize"
 AVAILABILITY_PROP=":available"
+DATETIMECHECKED_PROP="dgfr:availabilityCheckedOn"
 
 #If you get many errors upon data upload to triple store  (encoding, malformed Turtle), set this to "true". It will make an upload every 5 distribution. Slower, but less data loss.
 SMALL_BATCHES="false"
