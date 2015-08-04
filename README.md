@@ -1,4 +1,4 @@
-# beheader 0.12.0
+# beheader 0.13.0
 
 Script that retrieves a list of [dcat:Distribution](http://www.w3.org/TR/vocab-dcat/#Class:_Distribution) (file metadata) from a SPARQL endpoint and uses their URL to retrieve some information:
 
@@ -15,12 +15,21 @@ Sample Turtle RDF output:
 ```turtle
 @prefix : <http://colin.maudry.com/ontologies/dgfr#>.
 @prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix xs: <http://www.w3.org/2001/XMLSchema#> .
 
-<https://www.data.maudry.com/fr/resources/ff91442b-4916-4567-ab87-e5a6fe6254b6>
-	:responseStatusCode "HTTP/1.1 200 OK" ;
-	dgfr:available true ;
-	dcat:byteSize 29 ;
-	dcat:mediaType "text/html" .
+<https://www.data.maudry.com/fr/resources/ff91442b-4916-45<https://www.data.maudry.com/fr/resources/a6eda5aa-2741-4cfd-a2b3-e8ae6277937b> :responseStatusCode "HTTP/1.1 200 OK" ;
+:responseTime 0.227 ;
+:availabilityCheckedOn "2015-08-04T18-32-38+0200"^^xs:dateTime .
+<https://www.data.maudry.com/fr/resources/a6eda5aa-2741-4cfd-a2b3-e8ae6277937b> :available true .
+<https://www.data.maudry.com/fr/resources/a6eda5aa-2741-4cfd-a2b3-e8ae6277937b> dcat:byteSize 29 .
+<https://www.data.maudry.com/fr/resources/a6eda5aa-2741-4cfd-a2b3-e8ae6277937b> dcat:mediaType "text/html" .
+ 
+<https://www.data.maudry.com/fr/resources/164932c5-19ec-444b-9695-5e914a4dce22> :responseStatusCode "HTTP/1.1 404 NOT F
+OUND" ;
+:responseTime 0.282 ;
+:availabilityCheckedOn "2015-08-04T18-32-39+0200"^^xs:dateTime .
+<https://www.data.maudry.com/fr/resources/164932c5-19ec-444b-9695-5e914a4dce22> :available false .
+67-ab87-e5a6fe6254b6>
 ```
 
 ## Requirements
@@ -39,6 +48,12 @@ You need the following utilities installed
 3. Configure as you please
 
 It's preconfigured to upload to http://www.data.maudry.com, but you need the credentials to write there. So to upload somewhere else you need to modify `ENDOINT_URL` to match the base URL of your RDF repository.
+
+### 0.13.0
+
+* Added server response time, in seconds, for each file (`dgfr:responseTime`)
+* Added the date and time of the last time the availability of the file was checked (`dgfr:availabilityCheckedOn`)
+* The Turtle data file name is now dynamic in order not to erase previous data
 
 ### 0.12.0
 
