@@ -56,7 +56,7 @@ echo "$number) $url"
 #Get headers using URL to check the HTTP response code (200, 404, 500, etc.) and content type
 #-skIL = silent, ignore SSL certif, only print headers, follow redirects
 #...and I print the result in a file
-datetime=`date +%FT%H-%M-%S%z`
+datetime=`date +%FT%H:%M:%S%z`
 curl -skIL -X HEAD -w @"curl-format" -m $TIMEOUT "$url" 2>&1 | less > temp/http_headers
 
 if  [[ -s temp/http_headers  ]] ; then
@@ -67,7 +67,7 @@ full_http_response_time=`grep "Total-time" temp/http_headers | tr -d '\r' | sed 
 http_response_time=`cut -d " " -f 2  <<< "$full_http_response_time"`
 if [[ $http_response_code =~ 40[0,5] ]] ; then #if HEAD isn't supported (400 or 405)
 echo "...fall back to GET!"
-datetime=`date +%FT%H-%M-%S%z`
+datetime=`date +%FT%H:%M:%S%z`
 curl -skIL -X GET -w @"curl-format" -m $TIMEOUT "$url" 2>&1 | less > temp/http_headers
 http_response_code=`grep "HTTP/" temp/http_headers | tail -n 1 |tr [a-z] [A-Z] |tr -d '\r'`
 full_http_response_time=`grep "Total-time" temp/http_headers | tr -d '\r' | sed s/,/./g`
