@@ -1,4 +1,4 @@
-# beheader 0.13.2
+# beheader 0.14.0
 
 [DCAT](http://www.w3.org/TR/vocab-dcat) is a vocabulary used to describe published data. It's consequently metadata for this published data. A typical way to manage this DCAT metadata is as [RDF](https://en.wikipedia.org/wiki/Resource_Description_Framework), in a triple store, and to expose this data via a SPARQL endpoint to query it.
 
@@ -71,6 +71,12 @@ In order to save the logs, you can run instead:
 ```bash
 ./beheader.sh > beheader.log &
 ```
+
+### 0.14.0
+
+*  Forcing LF (and not DOS/CRLF) line breaks on SPARQL CSV query results
+* Configuration can now be selected as a parameter (#5)
+* SPARQL query now also includes dcat:Distribution in the main graph (#5)
 
 #### 0.13.2
 

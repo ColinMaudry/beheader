@@ -1,13 +1,13 @@
-PREFIX dgfr: <http://colin.maudry.com/ontologies/dgfr#>
 PREFIX dcat: <http://www.w3.org/ns/dcat#>
-PREFIX dcterms: <http://purl.org/dc/terms/>
 
-SELECT ?uri ?url ?issued
-WHERE {
-  graph ?graph {
-    ?uri a dcat:Distribution ;
-      dcat:downloadUrl ?url ;
-      dcterms:issued ?issued .
-  }
+select  ?uri ?url where {
+	{ graph ?g {
+		?uri a dcat:Distribution ;
+       dcat:downloadUrl ?url .
+	}
+	} union {
+		?uri a dcat:Distribution ;
+      dcat:downloadUrl ?url .
+	}
 }
-ORDER BY DESC (?issued)
+
