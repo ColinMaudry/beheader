@@ -1,8 +1,11 @@
 #!/bin/bash
 
 #Configuration
+if [[ -n $1 ]] ; then
+source $1
+else
 source ./config.sh
-
+fi
 
 shortdate=`date +%F`
 datafile="temp/${shortdate}_data.ttl"
@@ -36,10 +39,8 @@ echo "Getting list of files..."
 curl -s $ENDPOINT_READ_URL -H "Accept: text/csv"  --data-urlencode query@sparql/list.rq --output temp/list.csv
 
 sed -i '1d' temp/list.csv
+iconv
 
-if [[ -n $1 ]] ; then
-echo "urn:test:file,$1,somedate" > temp/list.csv
-fi
 filenum=`csvtool height temp/list.csv`
 echo "$filenum files to process"
 
