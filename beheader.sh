@@ -38,8 +38,11 @@ echo "Started at: $date"
 echo "Getting list of files..."
 curl -s $ENDPOINT_READ_URL -H "Accept: text/csv"  --data-urlencode query@sparql/list.rq --output temp/list.csv
 
+#I sometimes get DOS line breaks (CRLF) from the endpoint. So I force LF (Unix) line breaks
+sed -i 's/\r//g' temp/list.csv
+
+#Removing header row
 sed -i '1d' temp/list.csv
-iconv
 
 filenum=`csvtool height temp/list.csv`
 echo "$filenum files to process"
