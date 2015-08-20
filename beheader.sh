@@ -93,22 +93,24 @@ echo "<$uri> $AVAILABILITY_PROP true ." >> $datafile
 full_content_type=`grep "Content-Type: " temp/http_headers | tail -n 1 |tr -d "\r" `
 content_type=`echo "${full_content_type:14}"|tr -d '\r'`
 content_type=`echo ${content_type%%;*}`
+shp_regex='[=\.]shp|SHP'
 if [[ `echo "${url: -4}"` == ".csv"  ]] ; then
 content_type="text/csv"
 elif [[ `echo "${url: -4}"` == ".odt"  ]] ; then
 content_type="application/vnd.oasis.opendocument.text"
 elif [[ `echo "${url: -4}"` == ".ods"  ]] ; then
 content_type="application/vnd.oasis.opendocument.spreadsheet"
-elif [[ "$content_type" == "application/zip" ]] || [[ "$url" =~ [=|\.]shp|SHP ]] ; then
+elif [[ "$content_type" == "application/zip" && "$url" =~ [=\.]shp|SHP ]] ; then
 content_type="application/shp+zip"
 fi
 
 #Fetch Content-Length
 full_content_length=`grep "Content-Length: " temp/http_headers | tail -n 1 |tr -d "\r" `
 content_length=`echo "${full_content_length:16}"|tr -d '\r'`
-echo "Content size: 		$content_length"
 
+echo "Content size: 		$content_length"
 echo "Content type: 		$content_type"
+
 if [[ $content_length -gt 1 ]] ; then
 echo "<$uri> $CONTENT_LENGTH_PROP $content_length ." >> $datafile
 fi
