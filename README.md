@@ -22,7 +22,7 @@ Sample Turtle RDF output:
 
 <https://www.data.maudry.com/fr/resources/a6eda5aa-2741-4cfd-a2b3-e8ae6277937b> :responseStatusCode "HTTP/1.1 200 OK" ;
 :responseTime 0.227 ;
-:availabilityCheckedOn "2015-08-04T18-32-38+0200"^^xs:dateTime .
+:availabilityCheckedOn "2015-08-04T18:32:38+0200"^^xs:dateTime .
 <https://www.data.maudry.com/fr/resources/a6eda5aa-2741-4cfd-a2b3-e8ae6277937b> :available true .
 <https://www.data.maudry.com/fr/resources/a6eda5aa-2741-4cfd-a2b3-e8ae6277937b> dcat:byteSize 29 .
 <https://www.data.maudry.com/fr/resources/a6eda5aa-2741-4cfd-a2b3-e8ae6277937b> dcat:mediaType "text/html" .
@@ -63,7 +63,7 @@ In your terminal, run:
 If you get an error, you may need to make the file executable first, this way:
 
 ```
-chmod +x beheader.sh
+chmod u+x beheader.sh
 ```
 
 In order to save the logs, you can run instead:
@@ -72,50 +72,54 @@ In order to save the logs, you can run instead:
 ./beheader.sh > beheader.log &
 ```
 
-### 0.14.0
+##### 0.14.1
+
+* If the content type is "application/zip" and the URL of the resource contains `=shp` or `.shp` (or `SHP`), the content type is set to "application/shp+zip". I made it up to add it this standard and easy to use format in [the list of machine readable formats](https://github.com/ColinMaudry/datagouvfr-rdf/issues/37).
+
+#### 0.14.0
 
 *  Forcing LF (and not DOS/CRLF) line breaks on SPARQL CSV query results
 * Configuration can now be selected as a parameter (#5)
 * SPARQL query now also includes dcat:Distribution in the main graph (#5)
 
-#### 0.13.2
+##### 0.13.2
 
 * Fixed the datetime format for dgfr:availabilityCheckedOn (the time part used dashed instead of colons)
 
-#### 0.13.1
+##### 0.13.1
 
 * Fixed response time in case HEAD isn't supported and beheader falls back to using GET
 
-### 0.13.0
+#### 0.13.0
 
 * Added server response time, in seconds, for each file (`dgfr:responseTime`)
 * Added the date and time of the last time the availability of the file was checked (`dgfr:availabilityCheckedOn`)
 * The Turtle data file name is now dynamic in order not to erase previous data
 
-### 0.12.0
+#### 0.12.0
 
 * 2xx and 3xx codes assume the file is available
 * Switched back to HEAD to enable certain servers to have adequate response. If unsupported, automatic switch to GET
 * Configurable timeout (waiting time after which you consider the resource is not available)
 
-### 0.11.0
+#### 0.11.0
 
 * Switched to `curl -X GET -I` since it doesn't download the file and has better support from servers
 * Added inference of availability. If status is not `200 OK` then `dgfr:available false`
 
-#### 0.10.1
+##### 0.10.1
 
 * Improved cURL command for faster and more robust retrieval of HTTP headers (removed Inspire URL hack)
 * Possibility to specify the name of the target graph
 
-### 0.10
+#### 0.10
 
 * `iconv` -c Serializes the resulting TTL files to UTF-8 to remove encoding errors (loss of data :( )
 * & signs in URLs are better supported
 * Either upload data by small batches of 5 distributions, or a single shot at the end
 * Inspire URL have a more flexible timeout...
 
-### 0.9
+#### 0.9
 
 * Lists all dcat:Distribution referenced on data.gouv.fr, by ascending creation date
 * For each file:
