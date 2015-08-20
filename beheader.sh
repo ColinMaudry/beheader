@@ -99,6 +99,8 @@ elif [[ `echo "${url: -4}"` == ".odt"  ]] ; then
 content_type="application/vnd.oasis.opendocument.text"
 elif [[ `echo "${url: -4}"` == ".ods"  ]] ; then
 content_type="application/vnd.oasis.opendocument.spreadsheet"
+elif [[ "$content_type" == "application/zip" ]] || [[ "$url" =~ [=|\.]shp|SHP ]] ; then
+content_type="application/shp+zip"
 fi
 
 #Fetch Content-Length
