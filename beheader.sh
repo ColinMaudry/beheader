@@ -1,14 +1,16 @@
 #!/bin/bash
 
 #Configuration
-if [[ -n $1 ]] ; then
+if [[ -n $1 && ! $1 =~ "http" ]] ; then
 source $1
+configid=${1%%\.*}
 else
 source ./config.sh
+configid=""
 fi
 
 shortdate=`date +%F`
-datafile="temp/data_${1%%\.*}_${shortdate}.ttl"
+datafile="temp/data_${configid}_${shortdate}.ttl"
 
 #Clear temp files
 rm -rf temp
@@ -43,6 +45,10 @@ sed -i 's/\r//g' temp/list.csv
 
 #Removing header row
 sed -i '1d' temp/list.csv
+
+if [[ -n $1 && $1 =~ "http" ]] ; then
+echo "urn:test:file,$1,somedate" > temp/list.csv
+fi
 
 filenum=`csvtool height temp/list.csv`
 echo "$filenum files to process"
