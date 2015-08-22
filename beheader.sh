@@ -12,9 +12,6 @@ fi
 shortdate=`date +%F`
 datafile="temp/data${configid}_${shortdate}.ttl"
 
-#Clear temp files
-rm -rf temp
-
 #Create temp dir
 mkdir temp
 cp data_template.ttl temp/all_data.ttl
