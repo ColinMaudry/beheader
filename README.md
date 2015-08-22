@@ -1,4 +1,4 @@
-# beheader 0.14.3
+# beheader 0.14.4
 
 [DCAT](http://www.w3.org/TR/vocab-dcat) is a vocabulary used to describe published data. It's consequently metadata for this published data. A typical way to manage this DCAT metadata is as [RDF](https://en.wikipedia.org/wiki/Resource_Description_Framework), in a triple store, and to expose this data via a SPARQL endpoint to query it.
 
@@ -74,7 +74,7 @@ In order to save the logs, you can run instead:
 ./beheader.sh > beheader.log &
 ```
 
-To run beheader with a alternate configuration file:
+To run beheader with a alternate configuration file (you can run beheader on different configurations in parallel)
 
 ```bash
 ./beheader.sh configurationfile
@@ -86,6 +86,10 @@ To run beheader on a single URL with the default configuration (`config.sh`)
 ./beheader.sh http://example.com
 ```
 
+
+##### 0.14.4
+
+* Disabled suppression of temp directory
 
 ##### 0.14.3
 
