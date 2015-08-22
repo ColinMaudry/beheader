@@ -1,14 +1,16 @@
 #!/bin/bash
 
 #Configuration
-if [[ -n $1 ]] ; then
+if [[ -n $1 && ! $1 =~ "http" ]] ; then
 source $1
+configid="_${1%%\.*}"
 else
 source ./config.sh
+configid=""
 fi
 
 shortdate=`date +%F`
-datafile="temp/data_${1%%\.*}_${shortdate}.ttl"
+datafile="temp/data${configid}_${shortdate}.ttl"
 
 #Clear temp files
 rm -rf temp
@@ -36,15 +38,19 @@ echo "Started at: $date"
 
 #The list of files, sorted per dcterms created
 echo "Getting list of files..."
-curl -s $ENDPOINT_READ_URL -H "Accept: text/csv"  --data-urlencode query@sparql/list.rq --output temp/list.csv
+curl -s $ENDPOINT_READ_URL -H "Accept: text/csv"  --data-urlencode query@sparql/list.rq --output temp/list${configid}.csv
 
 #I sometimes get DOS line breaks (CRLF) from the endpoint. So I force LF (Unix) line breaks
-sed -i 's/\r//g' temp/list.csv
+sed -i 's/\r//g' temp/list${configid}.csv
 
 #Removing header row
-sed -i '1d' temp/list.csv
+sed -i '1d' temp/list${configid}.csv
 
-filenum=`csvtool height temp/list.csv`
+if [[ -n $1 && $1 =~ "http" ]] ; then
+echo "urn:test:file,$1,somedate" > temp/list${configid}.csv
+fi
+
+filenum=`csvtool height temp/list${configid}.csv`
 echo "$filenum files to process"
 
 number=0
@@ -61,20 +67,20 @@ echo "$number) $url"
 #-skIL = silent, ignore SSL certif, only print headers, follow redirects
 #...and I print the result in a file
 datetime=`date +%FT%H:%M:%S%z`
-curl -skIL -X HEAD -w @"curl-format" -m $TIMEOUT "$url" 2>&1 | less > temp/http_headers
+curl -skIL -X HEAD -w @"curl-format" -m $TIMEOUT "$url" 2>&1 | less > temp/http_headers${configid}
 
-if  [[ -s temp/http_headers  ]] ; then
+if  [[ -s temp/http_headers${configid} ]] ; then
 
 #All upper case, remove final carriage return
-http_response_code=`grep "HTTP/" temp/http_headers | tail -n 1 |tr [a-z] [A-Z] |tr -d '\r'`
-full_http_response_time=`grep "Total-time" temp/http_headers | tr -d '\r' | sed s/,/./g`
+http_response_code=`grep "HTTP/" temp/http_headers${configid} | tail -n 1 |tr [a-z] [A-Z] |tr -d '\r'`
+full_http_response_time=`grep "Total-time" temp/http_headers${configid} | tr -d '\r' | sed s/,/./g`
 http_response_time=`cut -d " " -f 2  <<< "$full_http_response_time"`
 if [[ $http_response_code =~ 40[0,5] ]] ; then #if HEAD isn't supported (400 or 405)
 echo "...fall back to GET!"
 datetime=`date +%FT%H:%M:%S%z`
-curl -skIL -X GET -w @"curl-format" -m $TIMEOUT "$url" 2>&1 | less > temp/http_headers
-http_response_code=`grep "HTTP/" temp/http_headers | tail -n 1 |tr [a-z] [A-Z] |tr -d '\r'`
-full_http_response_time=`grep "Total-time" temp/http_headers | tr -d '\r' | sed s/,/./g`
+curl -skIL -X GET -w @"curl-format" -m $TIMEOUT "$url" 2>&1 | less > temp/http_headers${configid}
+http_response_code=`grep "HTTP/" temp/http_headers${configid} | tail -n 1 |tr [a-z] [A-Z] |tr -d '\r'`
+full_http_response_time=`grep "Total-time" temp/http_headers${configid} | tr -d '\r' | sed s/,/./g`
 http_response_time=`cut -d " " -f 2  <<< "$full_http_response_time"`
 fi
 
@@ -90,7 +96,7 @@ if [[ $http_response_code =~ [2,3][0-9][0-9] ]] ; then #2xx and 3xx HTTP respons
 echo "<$uri> $AVAILABILITY_PROP true ." >> $datafile
 
 #Fetch Content-Type returned by the server
-full_content_type=`grep "Content-Type: " temp/http_headers | tail -n 1 |tr -d "\r" `
+full_content_type=`grep "Content-Type: " temp/http_headers${configid} | tail -n 1 |tr -d "\r" `
 content_type=`echo "${full_content_type:14}"|tr -d '\r'`
 content_type=`echo ${content_type%%;*}`
 shp_regex='[=\.]shp|SHP'
@@ -105,7 +111,7 @@ content_type="application/shp+zip"
 fi
 
 #Fetch Content-Length
-full_content_length=`grep "Content-Length: " temp/http_headers | tail -n 1 |tr -d "\r" `
+full_content_length=`grep "Content-Length: " temp/http_headers${configid} | tail -n 1 |tr -d "\r" `
 content_length=`echo "${full_content_length:16}"|tr -d '\r'`
 
 echo "Content size: 		$content_length"
@@ -141,7 +147,7 @@ if [[ $SMALL_BATCHES == "true" ]] ; then
 	fi #Is $number a multiple of 5?
 fi
 
-done < temp/list.csv #loop on CSV list entries
+done < temp/list${configid}.csv #loop on CSV list entries
 
 if [[ $SMALL_BATCHES != "true" ]] ; then 
         echo "Uploading all data in a single shot..."

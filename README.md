@@ -1,4 +1,4 @@
-# beheader 0.14.2
+# beheader 0.14.3
 
 [DCAT](http://www.w3.org/TR/vocab-dcat) is a vocabulary used to describe published data. It's consequently metadata for this published data. A typical way to manage this DCAT metadata is as [RDF](https://en.wikipedia.org/wiki/Resource_Description_Framework), in a triple store, and to expose this data via a SPARQL endpoint to query it.
 
@@ -48,13 +48,15 @@ You need the following utilities installed
 2. Rename it `config.sh`
 3. Configure as you please
 
+`config.sh` is the default configuration file that is used if no parameter is passed to the script. You can create other configuration files. The name of congiguration files shouldn't contain "http".
+
 It's preconfigured to upload to http://www.data.maudry.com, but you need the credentials to write there. So to upload somewhere else you need to modify `ENDPOINT_URL` to match the base URL of your RDF repository.
 
 Tell me if you struggle with the configuration.
 
 ## Run
 
-In your terminal, run:
+To run beheader with the default config.sh you created in **Configuration**:
 
 ```bash
 ./beheader.sh
@@ -72,9 +74,26 @@ In order to save the logs, you can run instead:
 ./beheader.sh > beheader.log &
 ```
 
+To run beheader with a alternate configuration file:
+
+```bash
+./beheader.sh configurationfile
+```
+
+To run beheader on a single URL with the default configuration (`config.sh`)
+
+```bash
+./beheader.sh http://example.com
+```
+
+
+##### 0.14.3
+
+* Temporary file names (also) contain the config ID (duh)
+
 ##### 0.14.2
 
-* Data file name now contains the name of the config files (enables parallel processing)
+* Data file name now contains the config ID (enables parallel processing)
 
 ##### 0.14.1
 
