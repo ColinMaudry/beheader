@@ -8,7 +8,7 @@ source ./config.sh
 fi
 
 shortdate=`date +%F`
-datafile="temp/${shortdate}_data.ttl"
+datafile="temp/data_${1%%\.*}_${shortdate}.ttl"
 
 #Clear temp files
 rm -rf temp
