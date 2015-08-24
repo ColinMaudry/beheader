@@ -63,7 +63,7 @@ echo "$number) $url"
 #Get headers using URL to check the HTTP response code (200, 404, 500, etc.) and content type
 #-skIL = silent, ignore SSL certif, only print headers, follow redirects
 #...and I print the result in a file
-datetime=`date +%FT%H:%M:%S%z`
+datetime=`date +%FT%H:%M:%S%:z`
 curl -skIL -X HEAD -w @"curl-format" -m $TIMEOUT "$url" 2>&1 | less > temp/http_headers${configid}
 
 if  [[ -s temp/http_headers${configid} ]] ; then
