@@ -41,6 +41,7 @@ You need the following utilities installed
 
 * curl
 * iconv
+* csvtool
 
 ## Configuration
 
