@@ -1,4 +1,4 @@
-# beheader 0.14.6
+# beheader 0.15.0
 
 [DCAT](http://www.w3.org/TR/vocab-dcat) is a vocabulary used to describe published data. It's consequently metadata for this published data. A typical way to manage this DCAT metadata is as [RDF](https://en.wikipedia.org/wiki/Resource_Description_Framework), in a triple store, and to expose this data via a SPARQL endpoint to query it.
 
@@ -86,6 +86,11 @@ To run beheader on a single URL with the default configuration (`config.sh`)
 ```bash
 ./beheader.sh http://example.com
 ```
+
+#### 0.15.0
+
+- Added a new setting: `USER_AGENT`, to inform of who we are
+- Added `csvtool` in the requirement, even if I could replace it easily...
 
 ##### 0.14.6
 
