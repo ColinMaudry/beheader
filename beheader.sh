@@ -65,7 +65,7 @@ echo "$number) $url"
 #...and I print the result in a file
 dateTimeFormat="%FT%H:%M:%S%:z"
 datetime=`date +$dateTimeFormat`
-curl -skIL -X HEAD -w @"curl-format" -m $TIMEOUT "$url" 2>&1 | less > temp/http_headers${configid}
+curl -skIL -X HEAD -w @"curl-format" -m $TIMEOUT --user-agent $USER_AGENT "$url" 2>&1 | less > temp/http_headers${configid}
 
 if  [[ -s temp/http_headers${configid} ]] ; then
 
