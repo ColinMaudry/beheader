@@ -76,7 +76,7 @@ http_response_time=`cut -d " " -f 2  <<< "$full_http_response_time"`
 if [[ $http_response_code =~ 40[0,5] ]] ; then #if HEAD isn't supported (400 or 405)
 echo "...fall back to GET!"
 datetime=`date +$dateTimeFormat`
-curl -skIL -X GET -w @"curl-format" -m $TIMEOUT "$url" 2>&1 | less > temp/http_headers${configid}
+curl -skIL -X GET -w @"curl-format" -m $TIMEOUT --user-agent $USER_AGENT "$url" 2>&1 | less > temp/http_headers${configid}
 http_response_code=`grep "HTTP/" temp/http_headers${configid} | tail -n 1 |tr [a-z] [A-Z] |tr -d '\r'`
 full_http_response_time=`grep "Total-time" temp/http_headers${configid} | tr -d '\r' | sed s/,/./g`
 http_response_time=`cut -d " " -f 2  <<< "$full_http_response_time"`
